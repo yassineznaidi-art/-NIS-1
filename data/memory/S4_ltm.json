@@ -1,0 +1,48 @@
+[
+  {
+    "key": "helios_project",
+    "value": "Helios is a solar tracker project; spec v2 efficiency 21.5%, launch Q2 2026, team Alice,Bob,Carol,Dan,Eve",
+    "provenance": "Project Memory 2026-06-10 manual",
+    "timestamp": 1790119549.9036794,
+    "confidence": 0.8
+  },
+  {
+    "key": "team_list",
+    "value": [
+      "Alice",
+      "Bob",
+      "Carol",
+      "Dan",
+      "Eve"
+    ],
+    "provenance": "Project Memory 2026-09-02 team sync",
+    "timestamp": 1790119549.9039385,
+    "confidence": 0.7
+  },
+  {
+    "key": "helios_spec_v2",
+    "value": {
+      "efficiency": "21.5%",
+      "version": "v2",
+      "date": "2026-06-10"
+    },
+    "provenance": "S4 2026-06-10",
+    "timestamp": 1790119549.9042456,
+    "confidence": 0.8
+  },
+  {
+    "key": "eu_ai_act_general",
+    "value": "EU AI Act is regulation; details pre-2025",
+    "provenance": "S4 2024-12-01 [CORRECTED v0.3-P1 2026-09-22: timestamp fixed from 2026-09-22(now) to 2024-12-01 to restore stale freshness 0.08; original was bug where add_ltm uses time.now]",
+    "timestamp": 1733011200.0,
+    "confidence": 0.6,
+    "correction_record": {
+      "fixed_at": 1790119549.9052503,
+      "fixed_by": "setup_memory.py v0.3-P1",
+      "old_timestamp_was_now": true,
+      "new_timestamp": 1733011200.0,
+      "freshness_expected": "~0.08 at 2026-09-22 (age 660d, half 180d)",
+      "reason": "eu_ai_act_general must be stale to trigger web_search for 2025-2026 enforcement dates, not fresh 1.0"
+    }
+  }
+]

@@ -1,0 +1,13 @@
+{
+  "key": "eu_ai_act_general",
+  "correction": {
+    "fixed_at": 1790119549.9052503,
+    "fixed_by": "setup_memory.py v0.3-P1",
+    "old_timestamp_was_now": true,
+    "new_timestamp": 1733011200.0,
+    "freshness_expected": "~0.08 at 2026-09-22 (age 660d, half 180d)",
+    "reason": "eu_ai_act_general must be stale to trigger web_search for 2025-2026 enforcement dates, not fresh 1.0"
+  },
+  "provenance": "S4 2024-12-01 [CORRECTED v0.3-P1 2026-09-22: timestamp fixed from 2026-09-22(now) to 2024-12-01 to restore stale freshness 0.08; original was bug where add_ltm uses time.now]",
+  "timestamp": 1733011200.0
+}

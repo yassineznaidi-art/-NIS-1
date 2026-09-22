@@ -1,0 +1,13 @@
+# NIS App v0.1 — application deps (core deps in requirements_v03.txt)
+fastapi==0.141.1
+uvicorn[standard]
+python-multipart
+# Core still needs:
+scikit-learn==1.6.1
+sentence-transformers==6.1.0
+torch  # cpu
+transformers
+huggingface-hub
+# Testing
+httpx
+pytest

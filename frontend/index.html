@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0A0A0B">
+<title>NIS — نِيسْ</title>
+<link rel="stylesheet" href="/static/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<!-- No external font required fallback to system -->
+</head>
+<body>
+<div id="app" class="app">
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-mark">◐</div>
+        <div class="brand-text">
+          <div class="brand-name">NIS</div>
+          <div class="brand-sub">نِيسْ <span class="brand-dot">·</span> assistant</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="btnNew" class="btn btn-ghost" title="New conversation">＋ New</button>
+        <button id="btnSessions" class="btn btn-ghost" title="Conversations">☰</button>
+        <button id="btnSettings" class="btn btn-ghost" title="Settings">⚙</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sessions Drawer -->
+  <aside id="sessionsDrawer" class="drawer hidden">
+    <div class="drawer-header">
+      <h3>Conversations</h3>
+      <button id="btnCloseDrawer" class="btn btn-ghost small">✕</button>
+    </div>
+    <div id="sessionsList" class="sessions-list"></div>
+    <div class="drawer-footer">
+      <small>Stored locally · NIS memory remains authoritative</small>
+    </div>
+  </aside>
+  <div id="drawerOverlay" class="drawer-overlay hidden"></div>
+
+  <!-- Main -->
+  <main class="main">
+    <div id="conversation" class="conversation" aria-live="polite">
+      <div class="empty-state" id="emptyState">
+        <div class="empty-icon">◐</div>
+        <h2>NIS</h2>
+        <p class="empty-ar">نِيسْ</p>
+        <p class="empty-desc">Your calm, intelligent assistant.</p>
+        <div class="suggestions" id="suggestions">
+          <button class="chip" data-prompt="What do you remember about Project Helios?">Remember Helios</button>
+          <button class="chip" data-prompt="Write a short poem about the sea for my daughter">Sea poem</button>
+          <button class="chip" data-prompt="Summarize the PDF I just uploaded">Summarize PDF</button>
+          <button class="chip" data-prompt="Search the web for the latest EU AI Act enforcement dates">EU AI Act</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Composer -->
+  <footer class="composer">
+    <div class="composer-inner">
+      <div class="input-wrap">
+        <textarea id="input" rows="1" placeholder="Message NIS…" aria-label="Message NIS"></textarea>
+        <div class="composer-actions">
+          <button id="btnMic" class="btn btn-icon" title="Voice input — future" disabled>🎤</button>
+          <button id="btnSend" class="btn btn-primary">Send</button>
+        </div>
+      </div>
+      <div class="composer-foot">
+        <span class="foot-note">NIS Core · verified · private scratch never shown</span>
+        <span id="status" class="status"></span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Settings Modal -->
+  <dialog id="settingsDialog" class="modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Settings</h3>
+        <button class="btn btn-ghost small" onclick="document.getElementById('settingsDialog').close()">✕</button>
+      </div>
+      <div class="modal-body" id="settingsBody">
+        <div class="setting">
+          <label>Model provider</label>
+          <select id="settingProvider">
+            <option value="nis_core">NIS Core (real)</option>
+            <option value="mock">Mock (development)</option>
+          </select>
+          <small id="providerNote"></small>
+        </div>
+        <div class="setting">
+          <label>Memory</label>
+          <label class="toggle"><input type="checkbox" id="settingMemory" checked> Enabled <span class="toggle-note">uses NIS memory (S3/S4/S5)</span></label>
+        </div>
+        <div class="setting">
+          <label>Response style</label>
+          <select id="settingStyle">
+            <option value="warm">Warm</option>
+            <option value="concise">Concise</option>
+          </select>
+        </div>
+        <div class="setting">
+          <label>Debug mode</label>
+          <label class="toggle"><input type="checkbox" id="settingDebug"> Show diagnostics</label>
+          <small>Normal users never see traces. Debug only for developers.</small>
+        </div>
+        <div class="setting">
+          <label>Voice</label>
+          <div class="voice-stub">VoiceInput / VoiceOutput — prepared interface, <b>disabled</b> in v0.1. Mark as future capability.</div>
+        </div>
+        <div class="setting">
+          <button id="btnHealth" class="btn btn-ghost">Check NIS Core health</button>
+          <pre id="healthOut" class="health-out"></pre>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" onclick="document.getElementById('settingsDialog').close()">Done</button>
+      </div>
+    </div>
+  </dialog>
+
+  <div id="toast" class="toast hidden"></div>
+</div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

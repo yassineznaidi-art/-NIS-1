@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: nis-app-v01
+    env: python
+    region: frankfurt # or oregon / singapore — pick near you
+    plan: free
+    branch: main
+    buildCommand: "pip install -r requirements_v03.txt && pip install -r requirements_app.txt"
+    startCommand: "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    healthCheckPath: /api/health
+    envVars:
+      - key: MODEL_PROVIDER
+        value: nis_core
+      - key: NIS_USE_DENSE
+        value: false
+      - key: NIS_DEBUG
+        value: false
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      # Add your real LLM keys here as secret env vars (never in frontend):
+      # - key: OPENAI_API_KEY
+      #   sync: false
+      # - key: ANTHROPIC_API_KEY
+      #   sync: false

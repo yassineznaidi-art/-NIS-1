@@ -1,0 +1,22 @@
+{
+  "tone_preference": {
+    "value": "warm",
+    "updated": 1790119549.9027073,
+    "provenance": "N17 or explicit"
+  },
+  "proactive_level": {
+    "value": 0,
+    "updated": 1790119549.9028354,
+    "provenance": "N17 or explicit"
+  },
+  "language": {
+    "value": "en",
+    "updated": 1790119549.903108,
+    "provenance": "N17 or explicit"
+  },
+  "concise": {
+    "value": true,
+    "updated": 1790119549.90341,
+    "provenance": "N17 or explicit"
+  }
+}

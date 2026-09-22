@@ -1,0 +1,15 @@
+# NIS v0.3-P1 dependencies
+# Core
+scikit-learn==1.6.1
+# Dense embeddings (new, explicit)
+sentence-transformers==6.1.0
+torch  # cpu via https://download.pytorch.org/whl/cpu (pulled by sentence-transformers)
+transformers>=4.41.0
+huggingface-hub>=0.20.0
+# Already used
+numpy
+scipy
+
+# Install with workaround for /tmp 1GB limit:
+# mkdir -p /home/user/tmp && TMPDIR=/home/user/tmp pip install -r requirements_v03.txt --no-cache-dir
+# Model: all-MiniLM-L6-v2 downloaded on first run (~80MB) cached via huggingface, embeddings cached at data/memory/embeddings.json

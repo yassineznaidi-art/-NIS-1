@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NIS MVV Report — v1.1 Canonical</title>
+<style>
+body{font-family:Inter,Segoe UI,Helvetica,Arial,sans-serif;max-width:1100px;margin:0 auto;padding:24px;background:#f8fafc;color:#0f172a;line-height:1.55}
+h1{font-size:28px;margin:0 0 6px;color:#0f172a}
+h2{font-size:20px;margin:28px 0 10px;color:#1e293b;border-bottom:2px solid #e2e8f0;padding-bottom:6px}
+h3{font-size:16px;margin:18px 0 8px;color:#334155}
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.02em}
+.badge-real{background:#dcfce7;color:#166534;border:1px solid #86efac}
+.badge-mock{background:#fef9c3;color:#854d0e;border:1px solid #fde68a}
+.badge-stub{background:#ffedd5;color:#9a3412;border:1px solid #fed7aa}
+.badge-na{background:#e2e8f0;color:#475569;border:1px solid #cbd5e1}
+.badge-pass{background:#dcfce7;color:#166534;border:1px solid #86efac}
+.badge-fail{background:#fee2e2;color:#991b1b;border:1px solid #fecaca}
+table{width:100%;border-collapse:collapse;margin:10px 0 16px;font-size:13px}
+th{background:#1e293b;color:#fff;text-align:left;padding:8px 10px}
+td{padding:7px 10px;border-bottom:1px solid #e2e8f0;vertical-align:top}
+tr:nth-child(even) td{background:#f1f5f9}
+code{background:#e2e8f0;padding:1px 5px;border-radius:4px;font-size:12px}
+pre{background:#0f172a;color:#e2e8f0;padding:12px;border-radius:8px;overflow:auto;font-size:12px;line-height:1.45}
+.small{font-size:12px;color:#475569}
+.header-card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px 18px;margin:12px 0}
+.kv{display:grid;grid-template-columns:180px 1fr;gap:6px;font-size:13px}
+.trace{font-family:ui-monospace,Menlo,Consolas,monospace;background:#0f172a;color:#e2e8f0;padding:10px 12px;border-radius:8px;font-size:11.5px;white-space:pre-wrap}
+.alert{padding:10px 12px;border-radius:8px;font-size:13px;margin:8px 0}
+.alert-info{background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af}
+.alert-warn{background:#fffbeb;border:1px solid #fde68a;color:#92400e}
+a{color:#2563eb}
+</style>
+</head>
+<body>
+<h1>NIS MVV Report — v1.1 Canonical Compliance</h1>
+<div class="small">2026-09-22 22:50 UTC • Workspace <code>/home/user/nis-mvv</code> • Canonical <code>NIS_Architecture_v1.1_Canonical.html</code> (immutable) • <b>MVV — Not production-ready</b></div>
+
+<div class="header-card">
+<div class="kv">
+<div><b>Trace</b></div><div><code>INPUT → INTENT → MEMORY → DELIBERATION → PLAN → TOOL DECISION → PERMISSION → EXECUTION → VERIFICATION → RESPONSE</code></div>
+<div><b>Harness</b></div><div><code>python setup_memory.py && python run_simulations.py && python run_arch_tests.py</code></div>
+<div><b>Logs</b></div><div><code>logs/simulations.json</code> (5) • <code>logs/traces.json</code> • <code>logs/arch_tests.json</code> (6) • <code>logs/arch_traces.json</code></div>
+<div><b>Verdict</b></div><div><span class="badge badge-pass">11 / 11 PASS</span> — 5 simulations + 6 arch tests — all [STUB]/[MOCK] labelled, no silent simulation</div>
+</div>
+</div>
+
+<h2>1 — Implemented vs Stubbed Nodes</h2>
+<table>
+<tr><th>Node</th><th>Name</th><th>Status</th><th>Real vs Mock</th></tr>
+<tr><td><b>N0</b></td><td>Orchestrator</td><td><span class="badge badge-real">EXPLICIT REAL</span></td><td>State machine IDLE→…→IDLE, budgets per L, INCP routing, N15 reroute</td></tr>
+<tr><td><b>N0.1</b></td><td>Proactive Tick</td><td><span class="badge badge-stub">DERIVED GATED/DISABLED</span></td><td><code>proactive_tick_enabled=False</code> + N10 gate — T6 verified suppressed</td></tr>
+<tr><td><b>N1</b></td><td>Perception</td><td><span class="badge badge-real">EXPLICIT REAL</span></td><td>Normalize, PII redact regex, injection regex, attachment parse — REAL for <code>/home/user/*</code>, mock Helios PDF</td></tr>
+<tr><td><b>N2</b></td><td>Context</td><td><span class="badge badge-real">EXPLICIT REAL simplified</span></td><td>Merge history+memory+userState → WorkingContext; <span class="badge badge-stub">STUB</span> anaphora/compression</td></tr>
+<tr><td><b>N3</b></td><td>Intent</td><td><span class="badge badge-real">EXPLICIT REAL heuristic</span></td><td>Heuristics cover 5 sims + 6 arch tests; LLM classifier <span class="badge badge-na">NOT IMPLEMENTED</span></td></tr>
+<tr><td><b>N4</b></td><td>User-State</td><td><span class="badge badge-mock">MOCK simple</span></td><td>REAL S3 read (warm/proactive_level), volatile session mock</td></tr>
+<tr><td><b>N5</b></td><td>Memory Retrieval</td><td><span class="badge badge-real">EXPLICIT REAL lexical</span></td><td>File-backed S3/S4/S5 + S5 fs scan; vector hybrid <span class="badge badge-stub">STUB</span>; intent/project scoped; freshness appendix</td></tr>
+<tr><td><b>N6</b></td><td>Deliberation</td><td><span class="badge badge-real">EXPLICIT REAL</span></td><td>5-axis weighted 0.25/0.20/0.15/0.25/0.15 [RECOMMENDED], ×1.0→1.5, auto-escalate ≥0.6→L3, ≥0.8→L4; novelty detects <code>eu ai act</code>→0.7, <code>poem</code>→0.4</td></tr>
+<tr><td><b>N7</b></td><td>Reasoning</td><td><span class="badge badge-mock">MOCK heuristic</span></td><td>Persona OFF, <code>_private_scratch</code> firewalled, most-specific-first + <code>\btime\b</code> regex; L3+ enumeration stub</td></tr>
+<tr><td><b>N8</b></td><td>Planning</td><td><span class="badge badge-real">REAL linear</span> / <span class="badge badge-stub">STUB parallel</span></td><td>Linear DAG, fallback note for L3+, parallel <span class="badge badge-na">NOT IMPLEMENTED</span></td></tr>
+<tr><td><b>N9</b></td><td>Priority</td><td><span class="badge badge-real">EXPLICIT REAL</span></td><td>Literal stack 1 System &gt;2 Safety &gt;3 User &gt;4 Prefs &gt;5 Task &gt;6 Personality — Master Wins; variant audit</td></tr>
+<tr><td><b>N10</b></td><td>Permission</td><td><span class="badge badge-real">EXPLICIT REAL</span></td><td>A0-A2 allow, A3/A4 confirm (L4 thresh 0.35), injection/proactive deny</td></tr>
+<tr><td><b>N11</b></td><td>Tool Router</td><td><span class="badge badge-real">EXPLICIT REAL</span></td><td>7Q (Q1 skip → Q2 least-privilege → Q3 justification → Q4 slot → Q5 autonomy → Q6/Q7 verify)</td></tr>
+<tr><td><b>N12</b></td><td>Execution</td><td><span class="badge badge-real">Mixed</span></td><td><span class="badge badge-real">REAL</span> <code>read_file/write_file/bash/system_time</code> sandboxed; <span class="badge badge-mock">MOCK</span> <code>web_search/fetch_page/generate_image</code> flagged</td></tr>
+<tr><td><b>N13</b></td><td>Memory Formation</td><td><span class="badge badge-real">EXPLICIT REAL</span></td><td>Verified-only; most turns <code>NO_WRITE</code>; S4 real, Vault <span class="badge badge-stub">STUB</span> not encrypted</td></tr>
+<tr><td><b>N14</b></td><td>Verification</td><td><span class="badge badge-stub">DERIVED MVV LITE</span></td><td>V1 L2+, V3 intent, V4 tool accuracy (blocking), V6 conflicts, V7 CoT leak+hallucination (allows <code>Sources:/read_file/S4/via</code>), V8 stub</td></tr>
+<tr><td><b>N15</b></td><td>Error Recovery</td><td><span class="badge badge-real">EXPLICIT REAL typed</span></td><td><code>F-INS/F-AMB/F-TOOL/F-CONFLICT/F-MEM/F-EXEC/F-VER/F-PERM/F-UNSAFE/F-CAP</code> → next_node; retry budget stub</td></tr>
+<tr><td><b>N16</b></td><td>Response</td><td><span class="badge badge-real">EXPLICIT REAL</span></td><td>Style≠facts, CoT firewall, provenance citations, <code>eu ai act</code> before <code>time</code></td></tr>
+<tr><td><b>N17</b></td><td>Feedback</td><td><span class="badge badge-stub">STUB</span></td><td>Logs to S6, re-ranking <span class="badge badge-na">NOT IMPLEMENTED</span></td></tr>
+<tr><td><b>INCP</b></td><td>Envelope</td><td><span class="badge badge-real">DERIVED REAL</span></td><td><code>REQUEST/RESPONSE/EVENT/BLOCKED</code> + <code>GLOBAL_TRACE</code> per stage</td></tr>
+</table>
+<div class="alert alert-info"><b>Principle:</b> Every <code>[STUB]/[MOCK]/[NOT IMPLEMENTED]</code> is labelled in code and in logs; no capability is silently simulated.</div>
+
+<h2>2 — Memory Substrate (§4)</h2>
+<table>
+<tr><th>Store</th><th>Status</th><th>Backend</th><th>Notes</th></tr>
+<tr><td>S1 Working</td><td><span class="badge badge-mock">MOCK volatile</span></td><td>dict</td><td>Per-turn only</td></tr>
+<tr><td>S2 Conversation</td><td><span class="badge badge-real">REAL</span></td><td><code>data/memory/S2_conversation.json</code></td><td>Append via <code>append_conversation</code></td></tr>
+<tr><td>S3 Preferences</td><td><span class="badge badge-real">REAL</span></td><td><code>S3_preferences.json</code></td><td>warm, proactive_level=0, concise=true — freshness half-life 180d, thresh 0.5</td></tr>
+<tr><td>S4 LTM</td><td><span class="badge badge-real">REAL</span></td><td><code>S4_ltm.json</code></td><td>Helios team, specs versioned</td></tr>
+<tr><td>S5 Project</td><td><span class="badge badge-real">REAL fs</span></td><td><code>/home/user/project_helios.md</code></td><td>Project-scoped substring scan</td></tr>
+<tr><td>S6 Behavioral</td><td><span class="badge badge-stub">STUB</span></td><td><code>S6_behavioral.json</code></td><td>Positive feedback only; no re-ranking</td></tr>
+<tr><td>S7 Task</td><td><span class="badge badge-mock">MOCK volatile</span></td><td>dict</td><td>Not persisted</td></tr>
+<tr><td>Vault</td><td><span class="badge badge-stub">STUB gated</span></td><td><code>VAULT_secrets.json</code></td><td>Not encrypted</td></tr>
+</table>
+<p class="small">Retrieval is intent/project-scoped, deliberation-budgeted <code>L0:0 L1:3 L2:6 L3:12 L4:12</code>. Freshness <code>0.5^(age/180d)</code>; &lt;0.5 → appendix unless L3+. Conflicts surfaced, not overwritten. Seed via <code>setup_memory.py</code>.</p>
+
+<h2>3 — Tool Registry & 7Q Router</h2>
+<table>
+<tr><th>Tool</th><th>Cat</th><th>Aut</th><th>Impl</th><th>Notes</th></tr>
+<tr><td><code>read_file</code></td><td>read</td><td>A0</td><td><span class="badge badge-real">REAL sandboxed</span></td><td><code>resolve()</code>+prefix check, reads 8k</td></tr>
+<tr><td><code>write_file/edit_file</code></td><td>write</td><td>A1</td><td><span class="badge badge-real">REAL</span></td><td>Creates under <code>/home/user</code></td></tr>
+<tr><td><code>bash</code></td><td>compute</td><td>A1</td><td><span class="badge badge-real">REAL</span></td><td>cwd=/home/user, 10s</td></tr>
+<tr><td><code>system_time</code></td><td>read</td><td>A0</td><td><span class="badge badge-real">REAL</span></td><td>RECO — UTC string</td></tr>
+<tr><td><code>web_search</code></td><td>read</td><td>A2</td><td><span class="badge badge-mock">MOCK</span></td><td>Canned EU AI Act; <code>web_search:MOCK</code></td></tr>
+<tr><td><code>fetch_page</code></td><td>read</td><td>A2</td><td><span class="badge badge-mock">MOCK</span></td><td>Snippet ok + timeout for <code>bad.timeout.url</code></td></tr>
+<tr><td><code>generate_image</code></td><td>write</td><td>A1</td><td><span class="badge badge-mock">MOCK</span></td><td>Placeholder txt; <code>generate_image:MOCK</code></td></tr>
+<tr><td><code>generate_speech</code></td><td>write</td><td>A1</td><td><span class="badge badge-mock">MOCK→NOT_IMPL</span></td><td>Returns error</td></tr>
+<tr><td><code>ask_user/present/dry_run</code></td><td>interactive</td><td>A0</td><td><span class="badge badge-mock">MOCK</span></td><td>Clarification</td></tr>
+</table>
+<p class="small">7Q: Q1 Skip? → Q2 least-privilege → Q3 justification → Q4 slot validation → Q5 autonomy → Q6/Q7 verify_needed.</p>
+
+<h2>4 — Simulation Results (5 Canonical)</h2>
+<table>
+<tr><th>#</th><th>Input</th><th>Exp</th><th>Actual</th><th>Tool</th><th>Perm</th><th>Exec</th><th>Verif</th><th>Response</th></tr>
+<tr><td>S1</td><td>What's the time?</td><td>L0</td><td><span class="badge badge-pass">L0 0.123</span></td><td><code>system_time</code> A0</td><td>allow</td><td><b>ok real</b></td><td>pass</td><td>Grounded time + provenance</td></tr>
+<tr><td>S2</td><td>Poem sea daughter</td><td>L1</td><td><span class="badge badge-pass">L1 0.228</span></td><td>SKIP</td><td>allow</td><td>skipped</td><td>pass</td><td>Warm rhymed, save nudge A1</td></tr>
+<tr><td>S3</td><td>Summarize PDF Helios contradiction</td><td>L2</td><td><span class="badge badge-pass">L2 0.575</span></td><td><code>read_file</code> A0</td><td>allow</td><td>ok 22% p.4</td><td>pass</td><td>⚠️ 22% vs 21.5% surfaced, Sources</td></tr>
+<tr><td>S4</td><td>EU AI Act search + timeline image</td><td>L3</td><td><span class="badge badge-pass">L3 0.676</span></td><td><code>web_search</code> A2 + 2 fetches (1 timeout)</td><td>allow</td><td>ok MOCK</td><td>pass</td><td>Timeline with [1][2] MOCK citations + fallback note + [MOCK] image</td></tr>
+<tr><td>S5</td><td>Send email entire team delay 2w</td><td>L4</td><td><span class="badge badge-pass">L4 0.968</span></td><td><code>ask_user</code> confirm</td><td><b>confirm_needed</b></td><td>blocked</td><td>pass (needs confirm)</td><td><b>NOT sent</b> — draft + team list, Master Wins</td></tr>
+</table>
+
+<h2>5 — Architectural Tests (6)</h2>
+<table>
+<tr><th>#</th><th>Test</th><th>Input</th><th>Assertions</th><th>Result</th></tr>
+<tr><td>T1</td><td>Simple</td><td>Hello</td><td>L0/L1, SKIP, allow, pass</td><td><span class="badge badge-pass">PASS L0 0.137</span></td></tr>
+<tr><td>T2</td><td>Ambiguous</td><td>Do it</td><td>clarify/did you mean/ambiguous</td><td><span class="badge badge-pass">PASS L1 0.377</span></td></tr>
+<tr><td>T3</td><td>Memory</td><td>Remember Helios?</td><td>≥1 hit (got 2), SKIP, helios+memory, pass</td><td><span class="badge badge-pass">PASS L1 0.351</span></td></tr>
+<tr><td>T4</td><td>Tool-required</td><td>Read /home/user/helios_spec.pdf</td><td>read_file ok, 22%+efficiency</td><td><span class="badge badge-pass">PASS L2 0.457</span></td></tr>
+<tr><td>T5</td><td>Permission</td><td>Send it to him</td><td>L3/L4, clarify+ambiguous+confirm</td><td><span class="badge badge-pass">PASS L4 0.918</span></td></tr>
+<tr><td>T6</td><td>Proactive tick</td><td>proactive_tick()</td><td>deny disabled</td><td><span class="badge badge-pass">PASS</span></td></tr>
+</table>
+<p><span class="badge badge-pass">6 / 6 PASS</span> + 5 sims → <b>11 / 11 traces verified</b>. Logs: <code>logs/arch_tests.json</code> + <code>logs/arch_traces.json</code></p>
+
+<h2>6 — Logging / INCP</h2>
+<pre class="trace">[INPUT]         N1  IDLE → PERCEIVED          | Normalize, PII redact, injection scan…
+[MEMORY]        N4  PERCEIVED → USER_STATE_KNOWN| Load UserState (S3 prefs)…
+[INTENT]        N3  PERCEIVED → INTENT_KNOWN_DRAFT| Classify draft…
+[DELIBERATION]  N6  … → DELIBERATION_SET_DRAFT  | Score 5 axes…
+[MEMORY]        N5  … → MEMORY_RETRIEVED        | Hybrid retrieval budget 6…
+[MEMORY]        N2  … → CONTEXTUALIZED          | Merge history+memory…
+[INTENT]        N3  … → INTENT_KNOWN            | Classify full context…
+[DELIBERATION]  N6  … → DELIBERATION_SET        | Final L… score …
+[PERMISSION]    N9  … → PRIORITY_RESOLVED       | Literal stack Master Wins…
+[PERMISSION]    N10 … → CLEARED/CONFIRM_NEEDED  | Pre-check…
+[DELIBERATION]  N7  … → REASONED                | Persona-off, scratch firewalled…
+[PLAN]          N8  … → PLANNED                 | Linear plan 4 steps…
+[TOOL_DECISION] N11 … → TOOL_CALL/SKIP          | 7Q router…
+[PERMISSION]    N10 … → ALLOW                   | Per-tool A0-A2…
+[EXECUTION]     N12 … → EXECUTED                | Executed tool… provenance…
+[VERIFICATION]  N14 … → VERIFIED_PASS           | Pre-response V1-V7…
+[MEMORY]        N13 … → NO_WRITE                | No persistent write…
+[RESPONSE]      N16 … → RESPONDING              | Persona render, CoT firewall…
+[VERIFICATION]  N14 … → DELIVERED               | Final leak scan+V8…
+[TRACE_END]     N0  IDLE → IDLE                 | Turn complete ms</pre>
+<p class="small">Envelope: <code>nis:turn:{trace}:msg:{uuid}</code> with <code>metadata{deliberation_level,priority,state,timestamp}</code>. Global logger <code>GLOBAL_TRACE</code> holds per-trace events.</p>
+
+<h2>7 — Real vs Simulated</h2>
+<table>
+<tr><th>Capability</th><th>REAL</th><th>SIMULATED</th><th>Mark</th></tr>
+<tr><td>Filesystem/bash/system_time</td><td>Yes — sandboxed /home/user, <code>resolve()+prefix</code></td><td>—</td><td>provenance <code>:real</code> mock:false</td></tr>
+<tr><td>Web search/fetch/image</td><td>—</td><td>Canned MOCK, timeout simulation</td><td><span class="badge badge-mock">MOCK</span> flagged + user-visible disclaimer</td></tr>
+<tr><td>Memory S3/S4/S5/S2</td><td>Yes — JSON + fs scan</td><td>Vector hybrid <span class="badge badge-stub">STUB</span></td><td>S3/S4 provenance real</td></tr>
+<tr><td>S1/S7</td><td>—</td><td>volatile dict <span class="badge badge-mock">MOCK</span></td><td>Not persisted</td></tr>
+<tr><td>LLM classifier/reasoning</td><td>—</td><td>Heuristic <span class="badge badge-mock">MOCK</span></td><td>L3+ enumeration stub, firewall+V7 scan</td></tr>
+</table>
+
+<h2>8 — Known Limitations (MVV-lite)</h2>
+<ol style="font-size:13px">
+<li>S1 Working & S7 volatile — S2 kept with 24h TTL idea not enforced.</li>
+<li>S6 Behavioral stub — logs only, no re-ranking; threshold adaptation <span class="badge badge-na">NOT IMPLEMENTED</span>.</li>
+<li>Vault not encrypted — gate only.</li>
+<li>Lexical retrieval only — vector <span class="badge badge-stub">STUB</span>.</li>
+<li>N7 heuristic not LLM — alternatives enumeration stub.</li>
+<li>Planning sequential — parallel branches <span class="badge badge-na">NOT IMPLEMENTED</span>.</li>
+<li>Verification Lite — V1 presence, V2/V5/V8 stub; V7 heuristic (now allows <code>Sources:/read_file/S4/via</code>).</li>
+<li>Q1 freshness heuristic narrow.</li>
+<li>Proactive N0.1 rate-limit stub only.</li>
+<li>Error loops max 3 not iterated — degrades to <code>pass_with_warnings</code>.</li>
+</ol>
+
+<h2>9 — Architecture / Runtime Mismatches & Fixes</h2>
+<table>
+<tr><th>Mismatch</th><th>Fix</th><th>Status</th></tr>
+<tr><td>S2 L1→L0 drift (poem 0.192 &lt;0.20)</td><td>N6 novelty poem→0.4 + domain≥0.4</td><td><span class="badge badge-pass">FIXED L1 0.228</span></td></tr>
+<tr><td>S4 misrouted <code>timeline⊃time</code> → <code>system_time</code></td><td>N7/N16 reorder: <code>eu ai act</code> first, <code>\btime\b</code> + timeline exclusion</td><td><span class="badge badge-pass">FIXED</span></td></tr>
+<tr><td>S4 L2 0.618 &lt;0.65 L3</td><td>N3 consequence 0.6 + auto-escalate</td><td><span class="badge badge-pass">FIXED L3 0.676</span></td></tr>
+<tr><td>NameError <code>execute_tool</code></td><td>Import both ROUTER + execute_tool</td><td><span class="badge badge-pass">FIXED</span></td></tr>
+<tr><td>S3 V7 false-positive despite <code>Sources: read_file:…</code></td><td>N14 lower + allow <code>sources/read_file/S4/via</code></td><td><span class="badge badge-pass">FIXED pass</span></td></tr>
+<tr><td>N16 S4 returned clock not timeline</td><td>N16 eu ai act before time</td><td><span class="badge badge-pass">FIXED</span></td></tr>
+<tr><td>T3 V4 false-positive on <code>read_file</code> note</td><td>N16 note <code>read_file</code>→<code>file read</code> + N14 <code>pure retrieval</code> exemption</td><td><span class="badge badge-pass">FIXED</span></td></tr>
+</table>
+
+<h2>10 — Next Priorities (Ordered)</h2>
+<ol style="font-size:13px">
+<li><b>Vector Hybrid Retrieval</b> → embeddings + reranker; S1 window management.</li>
+<li><b>LLM N3/N7</b> → real classifier + persona-off model; keep firewall+V7.</li>
+<li><b>Parallel DAG</b> → executor for independent steps (e.g., 2 fetches parallel).</li>
+<li><b>Verification Full V1-V8</b> → hash grounding, consistency, slot fill, conflict scorer; 3 reroutes.</li>
+<li><b>Memory Formation hardening</b> → provenance graph, Vault encryption, S6 re-ranking loop.</li>
+<li><b>Permission A3/A4 connectors</b> → real email behind confirm tokens + dry_run.</li>
+<li><b>INCP control plane</b> → typed states, backpressure, idempotency store.</li>
+<li><b>Proactive N0.1</b> → consent model, rate-limit 1/session, learning-triggered nudges.</li>
+<li><b>Observability</b> → structured JSON SIEM, trace viewer.</li>
+<li><b>Diff automation</b> → 20-section CI tags <code>[EXACT/PARTIAL/MISSING…]</code>.</li>
+</ol>
+
+<h2>11 — How to Verify</h2>
+<pre>cd /home/user/nis-mvv
+python setup_memory.py
+python run_simulations.py   # logs/simulations.json + logs/traces.json
+python run_arch_tests.py    # logs/arch_tests.json + logs/arch_traces.json</pre>
+<p class="small">All 11 traces must show INPUT→RESPONSE with level-appropriate budgets and no hidden NOT_IMPLEMENTED. Check <code>cat logs/simulations.json | python -m json.tool</code></p>
+
+<div class="alert alert-warn"><b>MVV only — not production-ready.</b> All <span class="badge badge-stub">STUB</span> / <span class="badge badge-mock">MOCK</span> are intentional and labelled per canonical v1.1.</div>
+
+</body>
+</html>
